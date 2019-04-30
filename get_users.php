@@ -1,18 +1,24 @@
 <?php
-
 require "connect_db.php";
+//require "auth.php";
 
-$sql = "SELECT * FROM users LIMIT 1;";
+$min = "";
+
+if(isset($_GET["min-id"])){
+    $min = "LIMIT ".$_GET["min-id"];
+}
+
+$sql = "SELECT * FROM users $min ;";
 
 $res = $conn->query($sql);
 
 if($res->num_rows > 0){
-    //$info = array();
+    $info = array();
     while($row = $res->fetch_assoc()){
-        echo json_encode($row,JSON_NUMERIC_CHECK);
+        $info[] = $row;
     }
 
-   // echo json_encode($info,JSON_NUMERIC_CHECK);
+    echo json_encode($info,JSON_NUMERIC_CHECK);
 }else{
     echo "No results";
 }
